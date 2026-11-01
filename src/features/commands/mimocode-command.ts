@@ -7,7 +7,7 @@ import { OpenCodeCommand } from "./opencode-command.js";
  * and `~/.config/mimocode/commands/` (global), so this target reuses
  * {@link OpenCodeCommand} with that layout.
  *
- * @see https://github.com/XiaomiMiMo/MiMo-Code/blob/main/packages/opencode/src/config/command.ts
+ * @see https://github.com/XiaomiMiMo/MiMo-Code/blob/main/packages/cli/src/config/command.ts
  */
 export class MimocodeCommand extends OpenCodeCommand {
   protected static override readonly layout = MIMOCODE_LAYOUT;

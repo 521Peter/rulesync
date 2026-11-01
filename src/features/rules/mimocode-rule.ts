@@ -9,7 +9,7 @@ import { OpenCodeRule } from "./opencode-rule.js";
  * `instructions` list of its config, so this target reuses {@link OpenCodeRule}
  * with the `.mimocode/` layout.
  *
- * @see https://github.com/XiaomiMiMo/MiMo-Code/blob/main/packages/opencode/src/session/instruction.ts
+ * @see https://github.com/XiaomiMiMo/MiMo-Code/blob/main/packages/cli/src/session/instruction.ts
  */
 export class MimocodeRule extends OpenCodeRule {
   protected static override readonly layout = MIMOCODE_LAYOUT;

@@ -568,6 +568,13 @@ export class OpencodeMcp extends ToolMcp {
   /** Directory layout; OpenCode forks (MiMo Code) override it. */
   protected static readonly layout: OpencodeLayout = OPENCODE_LAYOUT;
 
+  /**
+   * Per-server keys a fork's MCP schema adds on top of OpenCode's. On generate
+   * each one a canonical server carries is copied verbatim onto that server's
+   * local or remote entry, as `timeout` and `oauth` are. OpenCode adds none.
+   */
+  protected static readonly extraPassthroughServerFields: readonly string[] = [];
+
   private readonly json: OpencodeConfig;
 
   /**
@@ -765,6 +772,7 @@ export class OpencodeMcp extends ToolMcp {
       configShape,
       logger,
     );
+    this.copyExtraPassthroughServerFields({ convertedMcp, mcpServers: transformedServers });
     if (this.layout.configVersion === "v2") {
       warnAboutOpencodeV2SseServers({ mcpServers: transformedServers, convertedMcp, logger });
     }
@@ -805,6 +813,36 @@ export class OpencodeMcp extends ToolMcp {
       }),
       validate,
     });
+  }
+
+  /**
+   * Copies {@link OpencodeMcp.extraPassthroughServerFields} from each canonical
+   * server onto its generated transport entry. A toggle entry is left alone:
+   * it has no transport for these keys to configure.
+   */
+  private static copyExtraPassthroughServerFields({
+    convertedMcp,
+    mcpServers,
+  }: {
+    convertedMcp: Record<string, OpencodeMcpServer>;
+    mcpServers: McpServers;
+  }): void {
+    if (this.extraPassthroughServerFields.length === 0) {
+      return;
+    }
+    for (const [serverName, entry] of Object.entries(convertedMcp)) {
+      const source = Object.hasOwn(mcpServers, serverName) ? mcpServers[serverName] : undefined;
+      if (source === undefined || !isOpencodeTransportServer(entry)) {
+        continue;
+      }
+      const sourceRecord = source as Record<string, unknown>;
+      const entryRecord = entry as Record<string, unknown>;
+      for (const key of this.extraPassthroughServerFields) {
+        if (sourceRecord[key] !== undefined) {
+          entryRecord[key] = sourceRecord[key];
+        }
+      }
+    }
   }
 
   /**
