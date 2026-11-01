@@ -219,8 +219,15 @@ function convertFromOpencodeFormat(
   remoteType: "sse" | "http",
 ): McpServers {
   const serverNames = Object.keys(opencodeMcp);
+  // A bare sanitized prefix has no tool suffix, so the owner lookup rejects
+  // it. Drop it here too, or the orphan importer splits a_b_ into server a
+  // and tool b_ when the listed server is a.b.
   const orphanTools = Object.fromEntries(
-    Object.entries(tools ?? {}).filter(([key]) => !findOpencodeToolOwner({ key, serverNames })),
+    Object.entries(tools ?? {}).filter(
+      ([key]) =>
+        !findOpencodeToolOwner({ key, serverNames }) &&
+        !serverNames.some((serverName) => key === opencodeMcpToolPermissionKey(serverName, "")),
+    ),
   );
   return {
     ...orphanMcpToolFiltersToRulesync(opencodeMcp, orphanTools),
