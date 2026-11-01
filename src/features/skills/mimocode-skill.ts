@@ -7,7 +7,7 @@ import { OpenCodeSkill } from "./opencode-skill.js";
  * `~/.config/mimocode/` (global), so this target reuses {@link OpenCodeSkill}
  * with that layout.
  *
- * @see https://github.com/XiaomiMiMo/MiMo-Code/blob/main/packages/opencode/src/skill/index.ts
+ * @see https://github.com/XiaomiMiMo/MiMo-Code/blob/main/packages/cli/src/skill/index.ts
  */
 export class MimocodeSkill extends OpenCodeSkill {
   protected static override readonly layout = MIMOCODE_LAYOUT;

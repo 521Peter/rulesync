@@ -7,7 +7,7 @@ import { OpenCodeSubagent } from "./opencode-subagent.js";
  * `~/.config/mimocode/agents/` (global), so this target reuses
  * {@link OpenCodeSubagent} with that layout.
  *
- * @see https://github.com/XiaomiMiMo/MiMo-Code/blob/main/packages/opencode/src/config/agent.ts
+ * @see https://github.com/XiaomiMiMo/MiMo-Code/blob/main/packages/cli/src/config/agent.ts
  */
 export class MimocodeSubagent extends OpenCodeSubagent {
   protected static override readonly layout = MIMOCODE_LAYOUT;
